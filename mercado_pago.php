@@ -5,7 +5,7 @@ use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
 
 
-MercadoPagoConfig::setAccessToken('TEST-3474067657275157-123104-2db723135a13fd454f1a7ecc8942a838-1501154808');
+MercadoPagoConfig::setAccessToken('Acces_Token');
 
 $client = new PreferenceClient();
 
@@ -44,7 +44,7 @@ $preference = $client->create([
 <div id="walletBrick_container"></div>
 
 <script>
-const mp = new MercadoPago('TEST-e2f5be56-4908-41ea-8198-19545095657b', {
+const mp = new MercadoPago('Your Public Key', {
     locale: 'es-MX'
 });
 
