@@ -2,6 +2,8 @@
 
 require 'config/config.php';
 require 'config/database.php';
+require __DIR__ . '/vendor/autoload.php';
+
 $db = new Database();
 $con = $db->conectar();
 

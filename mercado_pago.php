@@ -1,63 +1,61 @@
 <?php
-
 require __DIR__ . '/vendor/autoload.php';
 
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
 
 
-// Token de prueba
-MercadoPagoConfig::setAccessToken('TEST_ACCESS_TOKEN');
+MercadoPagoConfig::setAccessToken('TEST-3474067657275157-123104-2db723135a13fd454f1a7ecc8942a838-1501154808');
 
-// Crear preferencia
 $client = new PreferenceClient();
 
 $preference = $client->create([
     "items" => [
         [
             "id" => "DEP-0001",
-            "title" => "Balon de futbol",
+            "title" => "Balón de futbol",
             "quantity" => 1,
             "unit_price" => 150.00,
             "currency_id" => "MXN"
         ]
-        ], 
-
-        "statement_descriptor" => "Mi tienda cdp",
-        "external_reference" => "CDP001"
+    ],
+        /* se qued pendiente ya que son peticiones por https
+        "back_urls" => [
+            "success" => "http://localhost/Tienda_online/captura.php",
+            "failure" => "http://localhost/Tienda_online/fallo.php",
+            "pending" => "http://localhost/Tienda_online/captura.php"
+        ],
+        "auto_return" => "approved"
+        */
 ]);
-
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Integración con Checkout Pro</title>
-
+    <title>Checkout Mercado Pago</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
-    <h3>Mercado Pago</h3>
 
-    <div id="walletBrick_container"></div>
+<h3>Pagar con Mercado Pago</h3>
 
-    <script>
-        cont = mp = new MercadoPago('publicKey',{
-            locale: 'es-MX'
-        });
+<div id="walletBrick_container"></div>
 
-          const bricksBuilder = mp.bricks();
-  const renderWalletBrick = async (bricksBuilder) => {
-    await bricksBuilder.create("wallet", "walletBrick_container", {
-      initialization: {
-        preferenceId: "<?php echo $preference->id; ?>",
-      }
+<script>
+const mp = new MercadoPago('TEST-e2f5be56-4908-41ea-8198-19545095657b', {
+    locale: 'es-MX'
 });
-  };
 
-  renderWalletBrick(bricksBuilder);
-    </script>
+const bricksBuilder = mp.bricks();
+
+bricksBuilder.create("wallet", "walletBrick_container", {
+    initialization: {
+        preferenceId: "<?php echo $preference->id; ?>"
+    }
+});
+</script>
+
 </body>
 </html>
