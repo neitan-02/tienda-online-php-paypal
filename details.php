@@ -53,6 +53,11 @@
                 $dir->close();
             }
         }
+    $sqlCaracter = $con->prepare("SELECT DISTINCT(det.id_caracteristica) AS idCat, cat
+    .caracteristica FROM det_prod_caracter AS det INNER JOIN caracteristicas AS cat ON 
+    det.id_caracteristica=cat.id WHERE det.id_producto=?");
+    $sqlCaracter->execute([$id]);
+
     } else {
         echo 'Error al procesar la petición';
         exit;
@@ -160,10 +165,40 @@
                     <p class="lead">
                         <?php echo $descripcion; ?>
                     </p>
+                    <diV class="col-3 my-3">
+                        <?php 
+                        
+                        while($row_cat = $sqlCaracter->fetch(PDO::FETCH_ASSOC)){
+                            $idCat = $row_cat['idCat'];
+                           echo $row_cat['caracteristica'] . ": ";
+
+                           echo "<select class='form-select' id='cat_$idCat'>";
+
+                           $sqlDet = $con->prepare("SELECT id, valor, stock FROM 
+                           det_prod_caracter WHERE id_producto=? AND 
+                           id_caracteristica=?");
+                           $sqlDet->execute([$id, $idCat]);
+                           while($row_det = $sqlDet->fetch(PDO::FETCH_ASSOC)){
+                            echo "<option id='".$row_det['id']."'>".$row_det['valor']."</option>";
+                            
+                           }
+
+                           echo "</select>";
+                        }
+                        
+                        
+                        ?>
+                    </diV>
+
+                    <div class="col-3 my-3">
+                        Cantidad: <input class="form-control" id="cantidad" name="cantidad" 
+                        type="number" min="1" max="10" value="1">
+                    </div>
+
+
                     <div class="d-grid gap-3 col-10 mx-auto">
                         <button class="btn btn-primary" type="button">Comprar ahora</button>
-                        <button class="btn btn-outline-primary" type="button"
-                            onclick="addProducto(<?php echo $id; ?>, '<?php echo $token_tmp; ?>')">
+                        <button class="btn btn-outline-primary" id="btnAgregar" type="button">
                             Agregar al carrito
                         </button>
 
@@ -177,10 +212,19 @@
         crossorigin="anonymous"></script>
 
     <script>
-        function addProducto(id, token) {
+let btnAgregar = document.getElementById("btnAgregar");
+    
+    btnAgregar.onclick = function() {
+        let inputCantidad = document.getElementById("cantidad");
+        let cantidad = inputCantidad.value;
+        addProducto(<?php echo $id; ?>, cantidad, '<?php echo $token_tmp; ?>');
+    };
+
+        function addProducto(id, cantidad, token) {
             let url = 'clases/carrito.php'
             let formData = new FormData()
             formData.append('id', id);
+            formData.append('cantidad', cantidad)
             formData.append('token', token)
 
             fetch(url, {
