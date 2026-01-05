@@ -2,33 +2,28 @@
 
 require '../config/config.php';
 
-header('Content-Type: application/json');
-
-$datos = [
-    'ok' => false,
-    'numero' => 0
-];
-
-if (isset($_POST['id'], $_POST['token'])) {
-
+if(isset($_POST['id'])) {
     $id = $_POST['id'];
+    $cantidad = isset($_POST['cantidad']) ? $_POST['cantidad'] : 1;
     $token = $_POST['token'];
 
-    if ($token === hash_hmac('sha1', $id, KEY_TOKEN)) {
+    $token_tmp = hash_hmac('sha1', $id, KEY_TOKEN);
 
-        if (!isset($_SESSION['carrito']['productos'])) {
-            $_SESSION['carrito']['productos'] = [];
-        }
-
-        if (isset($_SESSION['carrito']['productos'][$id])) {
-            $_SESSION['carrito']['productos'][$id]++;
+    if ($token == $token_tmp && $cantidad > 0 && is_numeric($cantidad)) {
+        if(isset($_SESSION['carrito']['productos'][$id])) {
+            $_SESSION['carrito']['productos'][$id] += $cantidad;
         } else {
-            $_SESSION['carrito']['productos'][$id] = 1;
+         $_SESSION['carrito']['productos'][$id] = $cantidad;
         }
 
-        $datos['numero'] = array_sum($_SESSION['carrito']['productos']);
+        $datos['numero'] = count($_SESSION['carrito']['productos']);
         $datos['ok'] = true;
+
+    } else {
+        $datos['ok'] = false;
     }
+} else {
+    $datos['ok'] = false;
 }
 
 echo json_encode($datos);
