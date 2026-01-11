@@ -55,6 +55,12 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <a href="checkout.php" class="btn btn-primary">
                         Carrito<span id="num_cart" class="badge bg-secondary"><?php echo $num_cart; ?></span>
                     </a>
+
+                <button id="botonFlotante">
+                <img src="images/chatbot.png" alt="Chatbot" class="iconoBoton">
+                Asistente Virtual
+                </button>
+
                 </div>
             </div>
         </div>
@@ -89,6 +95,7 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
                                         onclick="addProducto(<?php echo $row['id']; ?>, '<?php echo hash_hmac('sha1', $row['id'], KEY_TOKEN); ?>')">
                                         Agregar al carrito
                                     </button>
+
                                 </div>
                             </div>
                         </div>
@@ -123,6 +130,14 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
                     }
                 })
         }
+    </script>
+
+     <script>
+        // Asignar evento al botón
+        document.getElementById("botonFlotante").addEventListener("click", function() {
+            const url = "http://localhost:8501/"; // Dirección a abrir
+            window.open(url, "_blank"); // "_blank" abre en nueva pestaña
+        });
     </script>
 
 </body>
