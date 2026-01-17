@@ -122,7 +122,7 @@ if(!empty($_POST)) {
                 </div>
 
                 <div class="col-md-6">
-                    <label for="apellidos"><span class="text-danger">*</span>Apellidos</label>
+                    <label for="apellidos"><span class="text-danger">*</span>Apellido Completo/label>
                     <input type="text" name="apellidos" id="apellidos" class="form-control" requireda>
                 </div>
                 
@@ -133,7 +133,7 @@ if(!empty($_POST)) {
                 </div>
 
                 <div class="col-md-6">
-                    <label for="telefono"><i class="fa-solid fa-mobile"></i><span class="text-danger">*</span>Telefono</label>
+                    <label for="telefono"><i class="fa-solid fa-mobile"></i><span class="text-danger">*</span>Numero de Telefono</label>
                     <input type="number" name="telefono" id="telefono" class="form-control" requireda>
                 </div>
 
@@ -149,12 +149,12 @@ if(!empty($_POST)) {
                 </div>
 
                 <div class="col-md-6">
-                    <label for="password"><span class="text-danger">*</span> Contraseña </label>
+                    <label for="password"><span class="text-danger">*</span> Password </label>
                     <input type="password" name="password" id="password" class="form-control" requireda>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="repassword"><span class="text-danger">*</span> Repetir Contraseña </label>
+                    <label for="repassword"><span class="text-danger">*</span> Repetir Password </label>
                     <input type="repassword" name="repassword" id="repassword" class="form-control" requireda>
                 </div>
                 
