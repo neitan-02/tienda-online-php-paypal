@@ -44,9 +44,29 @@ if(!empty($_POST)) {
     $id = registraCliente([$nombres, $apellidos, $email, $telefono, $dni], $con);
 
     if($id > 0) {
-        $pass_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        require 'clases/Mailer.php';
+        $mailer = new Mailer();
         $token = generarToken();
-        if(!registraUsuario([$usuario, $pass_hash, $token, $id], $con)){
+        $pass_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $idUsuario = registraUsuario([$usuario, $pass_hash, $token, $id], $con);
+        if($idUsuario > 0){
+
+        $url = SITE_URL . '/activa_cliente.php?id='. $idUsuario .' &token='.$token;
+        //http://localhost/Tienda_online/activa_cliente.php?id=5&token=2ebe9447c4557223618db0e51e22c56b
+        $asunto ="Activar cuenta - Tienda online";
+        $cuerpo ="Estimado $nombres: <br> Para continuar con el proceso de registro es indespensable de click
+        en la siguiente liga <a href='$url'>Activar cuenta</a>";
+
+            if($mailer->enviarEmail($email, $asunto, $cuerpo )){
+                echo "Para terminar el proceso de registro sig las instrucciones que le hemos enviado a la dirección
+                de correo electrónico $email";
+
+                exit;
+            } 
+
+        } else {
             $errors [] = "Error al registrar usuario";
         }
     } else {
@@ -81,7 +101,7 @@ if(!empty($_POST)) {
 <body>
     <header data-bs-theme="dark">
         <div class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container"> <a href="#" class="navbar-brand">
+            <div class="container"> <a href="index.php" class="navbar-brand">
                     <strong>Tienda online</strong> </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarHeader" aria-controls="navbarHeader"
